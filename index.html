@@ -1,1 +1,813 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة المحامي الاحترافي | فنون الإقناع والمرافعة والاختبارات التفاعلية</title>
+    <!-- Line Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #0B0E14;
+            --bg-card: #151A23;
+            --bg-card-hover: #1C2330;
+            --gold-primary: #C5A059;
+            --gold-light: #E5C378;
+            --gold-dark: #8C6D33;
+            --gold-glow: rgba(197, 160, 89, 0.25);
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --accent-red: #E53E3E;
+            --accent-green: #38A169;
+            --border-color: rgba(197, 160, 89, 0.2);
+            --border-glow: rgba(197, 160, 89, 0.4);
+            --font-title: 'Reem Kufi', serif;
+            --font-body: 'Tajawal', sans-serif;
+            --font-legal: 'Amiri', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(197, 160, 89, 0.03) 0%, transparent 40%);
+        }
+
+        /* Modal Screen for Activation Code */
+        #activation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(11, 14, 20, 0.96);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .activation-card {
+            background: var(--bg-card);
+            border: 2px solid var(--gold-primary);
+            border-radius: 16px;
+            padding: 45px 35px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--gold-glow);
+            position: relative;
+        }
+
+        .activation-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--gold-primary), transparent, var(--gold-dark));
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .activation-icon {
+            font-size: 64px;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .activation-card h2 {
+            font-family: var(--font-title);
+            color: var(--gold-light);
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .activation-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .activation-input {
+            width: 100%;
+            padding: 16px;
+            background: #0B0E14;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--gold-light);
+            font-size: 22px;
+            text-align: center;
+            letter-spacing: 6px;
+            font-family: monospace;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .activation-input:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .btn-gold {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-body);
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--gold-glow);
+        }
+
+        .error-msg {
+            color: var(--accent-red);
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* Main Platform Layout */
+        .app-container {
+            width: 100%;
+            max-width: 1280px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand i {
+            font-size: 32px;
+            color: var(--gold-primary);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-title);
+            font-size: 20px;
+            color: var(--gold-light);
+        }
+
+        .brand-text span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            color: var(--text-main);
+            background: rgba(255,255,255,0.03);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item i {
+            color: var(--gold-primary);
+            font-size: 18px;
+        }
+
+        /* Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            flex: 1;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            text-align: right;
+            width: 100%;
+        }
+
+        .nav-item:hover {
+            background: rgba(197, 160, 89, 0.05);
+            color: var(--gold-light);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, var(--gold-glow) 0%, transparent 100%);
+            border-right: 3px solid var(--gold-primary);
+            color: var(--gold-light);
+            font-weight: bold;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        /* View Containers */
+        .view-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Book Reader Format */
+        .book-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .book-title {
+            font-family: var(--font-title);
+            font-size: 26px;
+            color: var(--gold-light);
+        }
+
+        .chapter-tag {
+            background: var(--gold-glow);
+            color: var(--gold-primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
+
+        .legal-text {
+            font-family: var(--font-legal);
+            font-size: 20px;
+            line-height: 2.1;
+            color: #CBD5E1;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+
+        .legal-quote {
+            background: rgba(197, 160, 89, 0.05);
+            border-right: 4px solid var(--gold-primary);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        .legal-quote h4 {
+            font-family: var(--font-body);
+            color: var(--gold-primary);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        /* Quiz UI */
+        .quiz-box {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quiz-question {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: var(--bg-deep);
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 8px;
+            color: var(--text-main);
+            text-align: right;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover {
+            border-color: var(--gold-primary);
+            background: var(--bg-card-hover);
+        }
+
+        .option-btn.correct {
+            background: rgba(56, 161, 105, 0.2) !important;
+            border-color: var(--accent-green) !important;
+            color: #68D391;
+        }
+
+        .option-btn.wrong {
+            background: rgba(229, 62, 62, 0.2) !important;
+            border-color: var(--accent-red) !important;
+            color: #FC8181;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.03);
+            font-size: 14px;
+            line-height: 1.6;
+            display: none;
+            border-right: 3px solid var(--gold-primary);
+        }
+
+        /* Controls Footer */
+        .reader-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            color: var(--gold-light);
+            border-color: var(--gold-primary);
+        }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 16px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .leaderboard-table th {
+            color: var(--gold-primary);
+            font-size: 14px;
+        }
+
+        .rank-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .rank-1 { background: var(--gold-primary); color: #000; }
+        .rank-2 { background: #A0AEC0; color: #000; }
+        .rank-3 { background: #CD7F32; color: #000; }
+
+        @media (max-width: 850px) {
+            .main-content { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .stats-bar { width: 100%; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Activation Screen Overlay -->
+    <div id="activation-overlay">
+        <div class="activation-card">
+            <i class="las la-balance-scale activation-icon"></i>
+            <h2>موسوعة المحامي الاحترافي</h2>
+            <p>أدخل رمز التفعيل الخاص بك لفتح المراجع القانونية المتقدمة ونظام الاختبارات والمرافعة التفاعلية.</p>
+            <div class="input-group">
+                <input type="text" id="activation-code" class="activation-input" placeholder="X#X#X#" maxlength="8" autocomplete="off">
+            </div>
+            <button class="btn-gold" onclick="validateCode()">تفعيل المنصة والدخول</button>
+            <div id="error-msg" class="error-msg"><i class="las la-exclamation-circle"></i> رمز التفعيل غير صحيح! يرجى التأكد من الرمز.</div>
+        </div>
+    </div>
+
+    <!-- Main Platform Application -->
+    <div class="app-container">
+        <!-- Top Navigation Header -->
+        <header>
+            <div class="brand">
+                <i class="las la-gavel"></i>
+                <div class="brand-text">
+                    <h1>منصة المرافعة والقضاء التفاعلي</h1>
+                    <span>النسخة الاحترافية للمحامين والمستشارين</span>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <i class="las la-trophy"></i>
+                    <span>الرتبة: <strong id="user-rank" style="color:var(--gold-light)">مستشار مشارك</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="las la-star"></i>
+                    <span>النقاط: <strong id="user-points" style="color:var(--gold-light)">1,250</strong> XP</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="main-content">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <div class="sidebar-title">فصول الكتاب والتدريب</div>
+                <button class="nav-item active" onclick="switchTab('chapter1', this)">
+                    <i class="las la-book-open"></i>
+                    <span>الفصل الأول: فنون الإقناع القضائي</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('chapter2', this)">
+                    <i class="las la-microphone-alt"></i>
+                    <span>الفصل الثاني: استراتيجيات المرافعة</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('chapter3', this)">
+                    <i class="las la-balance-scale-left"></i>
+                    <span>الفصل الثالث: مناقشة الشهود</span>
+                </button>
+                
+                <div class="sidebar-title" style="margin-top:20px;">التحديات والتصنيف</div>
+                <button class="nav-item" onclick="switchTab('leaderboard', this)">
+                    <i class="las la-medal"></i>
+                    <span>لوحة الصدارة والفرسان</span>
+                </button>
+            </div>
+
+            <!-- Content Area Viewports -->
+            <div class="content-area">
+                
+                <!-- View 1: Chapter 1 -->
+                <div id="chapter1" class="view-panel active">
+                    <div class="book-header">
+                        <div class="book-title">الفصل الأول: فنون الإقناع واستراتيجيات التأثير</div>
+                        <span class="chapter-tag">قراءة + اختبار تفاعلي</span>
+                    </div>
+
+                    <div class="legal-text">
+                        تعتبر المرافعة القضائية الفعالة مزيجاً رصيناً بين البناء القانوني المتماسك والتأثير النفسي والإقناع المنطقي. إن المحامي الناجح لا يكتفي بررد النصوص القانونية، بل يصيغ منها رواية متماسكة تبطل أطروحة الخصم وتزرع الشك المعقول في عقيدة المحكمة.
+                    </div>
+
+                    <div class="legal-quote">
+                        <h4>تطبيق على التشريع السوداني (قانون الإثبات 1993):</h4>
+                        المادة (8) من قانون الإثبات تقرر أن "الأصل براءة الذمة، وعلى المبتدئ بالدعوى إثباتها". ومن هنا فإن الاعتماد على ثغرات البينة المقدمة من الاتهام أو المدعي يعد الاستراتيجية الأولى في الإقناع قبل تقديم البينة العكسية.
+                    </div>
+
+                    <!-- Interactive Quiz for Chapter 1 -->
+                    <div class="quiz-box">
+                        <div class="quiz-question">
+                            <i class="las la-question-circle" style="color:var(--gold-primary); font-size:24px;"></i>
+                            <span>سؤال تطبيقي (1): في دعوى جنائية تعتمد كلياً على بينة ظرفية (Circumstantial Evidence)، ما هو الدفع الأقوى الذي يحقق أعلى درجات الإقناع للمحكمة؟</span>
+                        </div>
+                        <div class="options-list">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 'q1-exp')">
+                                <span>أ) المطالبة بشطب الدعوى فوراً لعدم وجود شهود رؤية مباشرين.</span>
+                            </button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 'q1-exp')">
+                                <span>ب) إثبات وجود تفسير آخر معقول للوقائع يتسق مع براءة المتهم وفق المادة (8) إثبات.</span>
+                            </button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 'q1-exp')">
+                                <span>ج) الطعن في المادة القانونية المستند إليها ودفع عدم دستوريتها.</span>
+                            </button>
+                        </div>
+                        <div id="q1-exp" class="explanation">
+                            <strong>التفسير القانوني الصحيح:</strong> البينة الظرفية لا تؤدي للتدين إلا إذا كانت تؤدي إلى استنتاج واحد ووحيد هو إدانة المتهم. وبمجرد تقديم تفسير بديل معقول، ينشأ الشك المعقول (Reasonable Doubt) والذي يفسر دائماً لصالح المتهم وفق المبادئ التوجيهية للسوابق القضائية السودانية.
+                        </div>
+                    </div>
+
+                    <div class="reader-controls">
+                        <button class="btn-secondary" disabled>السابق</button>
+                        <button class="btn-gold" style="width:auto; padding:10px 25px;" onclick="switchTab('chapter2', document.querySelectorAll('.nav-item')[1])">التالي: الفصل الثاني</button>
+                    </div>
+                </div>
+
+                <!-- View 2: Chapter 2 -->
+                <div id="chapter2" class="view-panel">
+                    <div class="book-header">
+                        <div class="book-title">الفصل الثاني: المرافعة الجنائية وهدم أركان الجريمة</div>
+                        <span class="chapter-tag">تحليل سيناريو عملي</span>
+                    </div>
+
+                    <div class="legal-text">
+                        عند صياغة المرافعة الختامية في القضايا الجنائية الكبرى (مثل المادة 130 من القانون الجنائي السوداني 1991)، يجب التركيز المباشر على الركن المعنوي (القصد الجنائي) والركن المادي وقطع رابطة السببية.
+                    </div>
+
+                    <div class="legal-quote">
+                        <h4>سيناريو قضائي:</h4>
+                        اتهم (س) بالقتل العمد تحت المادة 130. أثبت التقارير الطبية وجود مرض سابق في القطب القلبي للمجني عليه، وأن الطعنة كانت سطحيّة في الذراع.
+                    </div>
+
+                    <!-- Interactive Quiz for Chapter 2 -->
+                    <div class="quiz-box">
+                        <div class="quiz-question">
+                            <i class="las la-question-circle" style="color:var(--gold-primary); font-size:24px;"></i>
+                            <span>سؤال تطبيقي (2): ما هو التكييف القانوني الأنسب للدفع المرفوع للمحكمة في هذا السيناريو؟</span>
+                        </div>
+                        <div class="options-list">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 'q2-exp')">
+                                <span>أ) الدفع بانقطاع رابطة السببية بين الفعل والوفاة وتعديل التهمة إلى الأذى العمد (المادة 139).</span>
+                            </button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 'q2-exp')">
+                                <span>ب) التمسك بالدفاع الشرعي الكامل عن النفس والإنكار التام للفعل.</span>
+                            </button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 'q2-exp')">
+                                <span>ج) التمسك بحالة السكر أو الاضطراب العقلي الموقت.</span>
+                            </button>
+                        </div>
+                        <div id="q2-exp" class="explanation">
+                            <strong>التفسير القانوني الصحيح:</strong> انقطاع علاقة السببية (Causation Chain) بين الطعنة السطحية وفاة المجني عليه يمنع توفر الركن المادي لحدث الوفاة كمسبب مباشر، مما يتطلب استبعاد المادة 130 وتعديل شطب القصد الجنائي للقتل.
+                        </div>
+                    </div>
+
+                    <div class="reader-controls">
+                        <button class="btn-secondary" onclick="switchTab('chapter1', document.querySelectorAll('.nav-item')[0])">السابق</button>
+                        <button class="btn-gold" style="width:auto; padding:10px 25px;" onclick="switchTab('chapter3', document.querySelectorAll('.nav-item')[2])">التالي: الفصل الثالث</button>
+                    </div>
+                </div>
+
+                <!-- View 3: Chapter 3 -->
+                <div id="chapter3" class="view-panel">
+                    <div class="book-header">
+                        <div class="book-title">الفصل الثالث: تقنيات المناقشة التقاطعية (Cross-Examination)</div>
+                        <span class="chapter-tag">مهارات المحاكمة</span>
+                    </div>
+
+                    <div class="legal-text">
+                        المناقشة التقاطعية لشاهد الاتهام هي السلاح الأقوى للمحامي. القاعدة الذهبية: "لا تسأل الشاهد سؤالاً لا تعرف إجابته سلفاً"، واستخدم الأسئلة الإيحائية (Leading Questions) لتضييق نطاق إجاباته.
+                    </div>
+
+                    <div class="quiz-box">
+                        <div class="quiz-question">
+                            <i class="las la-question-circle" style="color:var(--gold-primary); font-size:24px;"></i>
+                            <span>سؤال تطبيقي (3): وفقاً لقانون الإثبات السوداني 1993، متى يُسمح للمحامي بطرح أسئلة إيحائية على الشاهد؟</span>
+                        </div>
+                        <div class="options-list">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 'q3-exp')">
+                                <span>أ) أثناء الاستجواب الرئيسي لشاهده الخاص فقط.</span>
+                            </button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 'q3-exp')">
+                                <span>ب) أثناء المناقشة التقاطعية لشاهد الخصم أو عند إعلان الشاهد عدائياً (Hostile Witness).</span>
+                            </button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 'q3-exp')">
+                                <span>ج) لا يُسمح بالأسئلة الإيحائية مطلقاً في المحاكم السودانية.</span>
+                            </button>
+                        </div>
+                        <div id="q3-exp" class="explanation">
+                            <strong>التفسير القانوني الصحيح:</strong> المادة (53) وما يليها من قانون الإثبات تجيز استخدام الأسئلة الإيحائية في المناقشة التقاطعية لزعزعة المصداقية واختبار دقة الملاحظة لدى شاهد الخصم.
+                        </div>
+                    </div>
+
+                    <div class="reader-controls">
+                        <button class="btn-secondary" onclick="switchTab('chapter2', document.querySelectorAll('.nav-item')[1])">السابق</button>
+                        <button class="btn-gold" style="width:auto; padding:10px 25px;" onclick="switchTab('leaderboard', document.querySelectorAll('.nav-item')[3])">عرض لوحة الصدارة</button>
+                    </div>
+                </div>
+
+                <!-- View 4: Leaderboard -->
+                <div id="leaderboard" class="view-panel">
+                    <div class="book-header">
+                        <div class="book-title">فرسان المرافعة - لوحة الصدارة</div>
+                        <span class="chapter-tag">التصنيف الأسبوعي</span>
+                    </div>
+
+                    <p style="color:var(--text-muted); margin-bottom:20px;">يتم تحديث الترتيب بناءً على الاختبارات المحلولة، دقة الدفوع القانونية، وحل القضايا التفاعلية.</p>
+
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th>
+                                <th>المحامي / المستشار</th>
+                                <th>اللقب القضائي</th>
+                                <th>النقاط (XP)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="rank-badge rank-1">1</span></td>
+                                <td>أحمد محمد عبد الله</td>
+                                <td>مرافع خبير (Senior Advocate)</td>
+                                <td>2,850</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge rank-2">2</span></td>
+                                <td>سارة محمود الفاضل</td>
+                                <td>مستشار النقض والافتراضات</td>
+                                <td>2,410</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge rank-3">3</span></td>
+                                <td>محمد طه عطا المنان</td>
+                                <td>مستشار مشارك (أنتم)</td>
+                                <td><span id="lb-points">1,250</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge">4</span></td>
+                                <td>عمر الهاشمي</td>
+                                <td>باحث قانوني متقدم</td>
+                                <td>1,100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Logic -->
+    <script>
+        // Check local storage for existing activation
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('legal_app_activated') === 'true') {
+                document.getElementById('activation-overlay').style.display = 'none';
+            }
+        });
+
+        // Activation Key Validation: Exact pattern 1#3#4#
+        function validateCode() {
+            const codeInput = document.getElementById('activation-code').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if (codeInput === '1#3#4#') {
+                localStorage.setItem('legal_app_activated', 'true');
+                document.getElementById('activation-overlay').style.fadeOut = "300ms";
+                setTimeout(() => {
+                    document.getElementById('activation-overlay').style.display = 'none';
+                }, 300);
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('activation-code').style.borderColor = 'var(--accent-red)';
+            }
+        }
+
+        // Tab Navigation Switching Logic
+        function switchTab(viewId, element) {
+            // Hide all view panels
+            document.querySelectorAll('.view-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // Deactivate all sidebar items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Activate specific panel and sidebar item
+            document.getElementById(viewId).classList.add('active');
+            if (element) {
+                element.classList.add('active');
+            }
+        }
+
+        // Interactive Quiz Verification and Score Update
+        let currentPoints = 1250;
+        function checkAnswer(btn, isCorrect, expId) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.option-btn');
+            
+            // Disable all options in this question
+            buttons.forEach(b => b.style.pointerEvents = 'none');
+
+            const expBox = document.getElementById(expId);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                currentPoints += 150;
+                document.getElementById('user-points').innerText = currentPoints.toLocaleString();
+                document.getElementById('lb-points').innerText = currentPoints.toLocaleString();
+            } else {
+                btn.classList.add('wrong');
+            }
+
+            if (expBox) {
+                expBox.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
